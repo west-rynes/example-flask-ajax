@@ -1,0 +1,42 @@
+<script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<script type=text/javascript>
+  $(function() {
+    $('a#calculate').bind('click', function() {
+      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+        a: $('input[name="a"]').val(),
+        b: $('input[name="b"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      return false;
+    });
+  });
+</script>
+
+<script type=text/javascript>
+    $(function update() {
+  $.getJSON($SCRIPT_ROOT + '/ctime', {}, function(data) {
+    $("#ctime").text(data.result);
+    $("#array").text(data.array);
+    window.setTimeout(update, 1000); // 1 second update interval
+  });
+}); // automatically invoke for first run
+</script>
+
+<h1>jQuery Examples</h1>
+
+<h2>Function Call Update</h2>
+<p><input type=text size=5 name=a> +
+   <input type=text size=5 name=b> =
+   <span id=result>?</span>
+</p>
+<p><a href=# id=calculate>calculate server side</a></p>
+
+<h2>Example of Auto Update</h2>
+<p><span id=ctime>?</span></p>
+<p><span id=array>?</span></p>
